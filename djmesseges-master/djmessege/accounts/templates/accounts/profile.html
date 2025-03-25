@@ -1,0 +1,26 @@
+
+
+{% extends 'main/layout.html' %}
+
+{% block title %}
+{{ title }}
+{% endblock %}
+
+{% block body %}
+<main>
+  <section class="py-5 text-center container">
+    <div class="row py-lg-5">
+      <div class="col-lg-6 col-md-8 mx-auto">
+          <h1 class="fw-light">Profile</h1>
+          <p class="lead text-body-secondary">Welcome, {{ user.username }}!</p>
+          <p class="lead text-body-secondary">Email: {{ user.email }}</p>
+          <p>
+            <a href="{% url 'logout' %}" class="btn btn-secondary my-2">Logout</a>
+        </p>
+      </div>
+    </div>
+  </section>
+</main>
+{% endblock %}
+
+

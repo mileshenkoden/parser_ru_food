@@ -1,0 +1,151 @@
+{% extends 'main/layout.html' %}
+
+{% block title %}
+  Додати рецепт
+{% endblock %}
+
+{% block body %}
+<div class="container">
+  <h1 class="mt-5 mb-4">Додати рецепт</h1>
+
+  <!-- Виведення помилок форми -->
+  {% if form.errors %}
+    <div class="alert alert-danger">
+      <ul>
+        {% for field in form %}
+          {% for error in field.errors %}
+            <li>{{ error }}</li>
+          {% endfor %}
+        {% endfor %}
+      </ul>
+    </div>
+  {% endif %}
+
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    <!-- Назва рецепту -->
+    <div class="mb-3">
+      {{ form.title.label_tag }}
+      {{ form.title }}
+    </div>
+
+    <!-- Фото рецепту -->
+    <div class="mb-3">
+      {{ form.photo.label_tag }}
+      {{ form.photo }}
+    </div>
+
+    <!-- Короткий опис -->
+    <div class="mb-3">
+      {{ form.description.label_tag }}
+      {{ form.description }}
+    </div>
+
+    <!-- Інгредієнти -->
+    <div class="mb-3">
+      {{ form.ingredients.label_tag }}
+      {{ form.ingredients }}
+    </div>
+
+    <h3>Інструкції:</h3>
+
+    <div id="instructions-container">
+      <div class="instruction-step">
+        <textarea name="instruction_text[]" placeholder="Текст інструкції" class="form-control"></textarea>
+        <input type="file" name="instruction_image[]" accept="image/*" class="form-control">
+
+
+      </div>
+    </div>
+
+    <button type="button" onclick="addInstruction()">Додати інструкцію</button>
+
+
+    <!-- Покрокова інструкція -->
+<!--    <div id="instruction-container" class="mb-3">-->
+<!--      <label>Покрокова інструкція:</label>-->
+<!--      <div class="instruction-step mb-3">-->
+<!--        <textarea class="form-control step-text" placeholder="Опис кроку"></textarea>-->
+<!--        <input type="file" class="form-control step-image mt-2">-->
+<!--      </div>-->
+<!--    </div>-->
+<!--    <button type="button" id="add-step" class="btn btn-secondary mb-3">Додати крок</button>-->
+
+    <!-- Примітки -->
+    <div class="mb-3">
+      {{ form.notes.label_tag }}
+      {{ form.notes }}
+    </div>
+
+
+
+
+    <!-- Приховане поле для інструкцій -->
+    <input type="hidden" name="instructions_str" id="instructions-json">
+
+    <button type="submit" class="btn btn-success">Зберегти</button>
+  </form>
+</div>
+
+<script>
+  let stepCount = 1; // Лічильник для номеру кроку
+
+  // Додавання нового кроку інструкції
+  document.getElementById('add-step').addEventListener('click', function () {
+    const container = document.getElementById('instruction-container');
+
+    // Створення нового блоку кроку
+    const stepDiv = document.createElement('div');
+    stepDiv.classList.add('instruction-step', 'mb-3');
+
+    // Внутрішній HTML для кроку
+    stepDiv.innerHTML =
+      '<textarea class="form-control step-text" placeholder="Опис кроку"></textarea>' +
+      '<input type="file" class="form-control step-image mt-2">' +
+      `<input type="hidden" name="step_number_text[]" value="${stepCount}">`; // Додавання прихованого поля для step_number
+
+    // Додаємо новий крок до контейнера
+    container.appendChild(stepDiv);
+
+    // Збільшуємо лічильник для наступного кроку
+    stepCount++;
+  });
+
+  // Формування JSON перед відправкою форми
+  function addInstruction() {
+      const container = document.getElementById('instructions-container');
+      const newStep = document.createElement('div');
+      newStep.classList.add('instruction-step');
+
+      // Текстове поле для інструкції
+      const textArea = document.createElement('textarea');
+      textArea.name = 'instruction_text[]'; // Масив текстових інструкцій
+      textArea.placeholder = 'Текст інструкції';
+      textArea.classList.add('form-control');
+
+      // Поле для вибору зображення
+      const fileInput = document.createElement('input');
+      fileInput.type = 'file';
+      fileInput.name = 'instruction_image[]'; // Масив файлів
+      fileInput.accept = 'image/*';
+      fileInput.classList.add('form-control');
+
+      // Приховане поле для step_number
+      const stepNumberInput = document.createElement('input');
+      stepNumberInput.type = 'hidden';
+      stepNumberInput.name = 'step_number[]';
+      stepNumberInput.value = document.querySelectorAll('.instruction-step').length + 1;
+
+      newStep.appendChild(textArea);
+      newStep.appendChild(fileInput);
+      newStep.appendChild(stepNumberInput);
+
+      container.appendChild(newStep);
+  }
+
+</script>
+
+
+
+{% endblock %}

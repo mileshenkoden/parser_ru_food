@@ -1,0 +1,15 @@
+{% extends 'main/layout.html' %}
+
+{% block title %}
+Add post
+{% endblock %}
+
+{% block body %}
+<div class="container">
+  <h1>Видалити статтю</h1>
+  <form method="post" enctype="multipart/form-data">  <!-- enctype додано для роботи з файлами -->
+      {% csrf_token %}
+      <input type="submit" class="btn btn-success" value="Видалити">
+  </form>
+</div>
+{% endblock %}

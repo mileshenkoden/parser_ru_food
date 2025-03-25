@@ -1,0 +1,68 @@
+{% extends 'main/layout.html' %}
+
+{% block title %}
+  {{ article.title }}
+{% endblock %}
+
+{% block body %}
+<div class="container">
+  <h1 class="text-center my-4">{{ article.title }}</h1>
+
+  <!-- Основне зображення рецепта -->
+  {% if article.photo %}
+    <div class="text-center mb-4">
+      <img src="{{ article.photo.url }}" alt="{{ article.title }}" class="img-fluid" style="max-height: 400px;">
+    </div>
+  {% endif %}
+
+  <!-- Короткий опис -->
+  <div class="mb-4">
+    <h4>Опис:</h4>
+    <p>{{ article.description }}</p>
+  </div>
+
+  <!-- Інгредієнти -->
+  <div class="mb-4">
+    <h4>Інгредієнти:</h4>
+    <ul>
+      {% for ingredient in article.ingredients.splitlines %}
+        <li>{{ ingredient }}</li>
+      {% endfor %}
+    </ul>
+  </div>
+
+  <!-- Інструкція -->
+  <div class="mb-4">
+    <h4>Інструкція:</h4>
+    <ol>
+      {% for step in instructions_text %}
+        <li class="mb-3">
+          <p class="text-step"> {{ step.text }}</p>
+
+          {% for image in instructions_image %}
+            {% if image.step_number == step.step_number %}
+              <div class="text-center">
+                <img src="{{ image.image.url }}" alt="Крок {{ step.step_number }}" class="img-fluid" style="max-height: 300px;">
+              </div>
+            {% endif %}
+          {% endfor %}
+        </li>
+      {% endfor %}
+    </ol>
+  </div>
+
+  <!-- Примітки -->
+  {% if article.notes %}
+    <div class="mb-4">
+      <h4>Примітки:</h4>
+      <p>{{ article.notes }}</p>
+    </div>
+  {% endif %}
+
+  <!-- Дії -->
+  <div class="text-center">
+    <a href="{% url 'recipes-update' article.id %}" class="btn btn-warning mx-2">Редагувати</a>
+    <a href="{% url 'recipes-delete' article.id %}" class="btn btn-danger mx-2">Видалити</a>
+  </div>
+</div>
+{% endblock %}
