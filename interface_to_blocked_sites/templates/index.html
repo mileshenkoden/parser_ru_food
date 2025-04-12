@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Redirect Generator</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+body {
+  /* Set background color, font, and padding for the body */
+  background-color: #f8f9fa;
+  font-family: Arial, sans-serif;
+  padding: 20px;
+  max-width: 100%;
+}
+
+.status {
+  /* Padding for the status container */
+  padding: 13px;
+}
+
+.status-container {
+  /* Minimum and maximum width for the status container */
+  min-width: 80px;
+  max-width: 80px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+#status_icons {
+  /* Flex container for status icons */
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  align-items: center;
+}
+
+#status_icons svg {
+  /* Size and cursor style for status icons */
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+
+.status-icon {
+  /* Centering the status icons */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.form-container {
+  /* Style for the form container including max width, padding, and box shadow */
+  max-width: 1200px;
+  margin: 20px auto;
+  padding: 20px;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+  /* Style for headings: font size, weight, margin, and alignment */
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-bottom: 10px;
+  text-align: left;
+}
+
+.textarea-container {
+  /* Flex styling for text area containers */
+  flex: 0.9;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.textarea-container h2 {
+  /* Margin for the heading in the textarea container */
+  margin-bottom: 10px;
+}
+
+textarea {
+  /* Styling for textarea elements: width, font, border, padding, etc. */
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  resize: none;
+  white-space: nowrap;
+  padding: 10px;
+  font-family: "Courier New", Courier, monospace;
+  font-size: 14px;
+  border: 1px solid #ced4da;
+  border-radius: 5px;
+  background-color: #f8f9fa;
+  min-height: 50px;
+
+
+}
+
+textarea:focus {
+  /* Focus styling for the textarea */
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.25);
+}
+
+textarea[readonly] {
+  /* Styling for read-only textareas */
+  background-color: #e9ecef;
+}
+
+.btn {
+  /* General button styling */
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.btn:hover {
+  /* Hover effect for buttons */
+  background-color: #0056b3;
+}
+
+.controls {
+  /* Flex container for the control section */
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 5px;
+}
+
+.controls .d-flex {
+  /* Flex container for controlling form elements */
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.controls select {
+  /* Style for the select input */
+  min-width: 280px;
+  height: 50px;
+  padding: 6px 12px;
+  font-size: 16px;
+  border: 1px solid #ced4da;
+  border-radius: 5px;
+}
+
+.controls .btn {
+  /* Button styling within the control section */
+  height: 50px;
+  font-size: 16px;
+  padding: 6px 12px;
+}
+
+.row {
+  /* Flex layout for the row section */
+  padding: 20px;
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+}
+
+.textarea-container {
+  /* Flex properties for the textarea containers */
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.nom {
+  /* Styling for the numbering section */
+  flex: 0.05;
+}
+
+#line_numbers {
+  /* Styling for the line numbers area */
+  font-family: "Courier New", Courier, monospace;
+  font-size: 14px;
+  padding: 10px 5px;
+  background-color: #f8f9fa;
+  border-right: 1px solid #ced4da;
+  text-align: right;
+  min-width: 40px;
+  max-width: 40px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+#line_numbers div {
+  /* Styling for individual line numbers */
+  line-height: 1.5;
+}
+
+.textarea-container textarea {
+  /* Styling for textareas inside the container */
+  width: 100%;
+  resize: none;
+  white-space: nowrap;
+  padding: 10px;
+  font-family: "Courier New", Courier, monospace;
+  font-size: 14px;
+  border: 1px solid #ced4da;
+  border-radius: 5px;
+  background-color: #f8f9fa;
+  min-height: 50px;
+}
+
+@media (max-width: 768px) {
+  /* Stack the row items vertically on smaller screens */
+  .row {
+    flex-direction: column;
+  }
+}
+
+  </style>
+</head>
+<body>
+  <!-- Form to handle redirect type selection and submission -->
+  <form action="/" method="post">
+
+    <!-- Container for redirect type selection and buttons -->
+    <div class="controls d-flex flex-column align-items-start gap-2">
+
+
+      <!-- Dropdown for selecting redirect type and buttons -->
+      <div class="d-flex align-items-center gap-2">
+
+
+        <!-- Submit button for generating redirects -->
+        <input type="submit" value="Generate Redirects" class="btn btn-primary">
+
+        <!-- Button to check the inputs or results -->
+        <button id="checkButton" type="button" class="btn btn-secondary">Check</button>
+      </div>
+    </div>
+
+    <!-- Container for displaying URLs and generated redirects -->
+    <div class="row">
+
+      <!-- Section for displaying line numbers -->
+      <div class="nom">
+        <h2>№</h2>
+        <div id="line_numbers" class="d-flex flex-column text-end">
+
+        </div>
+      </div>
+
+      <!-- Textarea for inputting "To URLs" -->
+      <div class="textarea-container">
+        <h2>Our Sites:</h2>
+        <textarea id="our_sites" name="our_sites" required>{{ our_sites }}</textarea>
+      </div>
+
+      <!-- Textarea for displaying generated redirects -->
+      <div class="textarea-container">
+        <h2>Results</h2>
+        <textarea id="generated_redirects" name="generated_redirects" aria-multiline="true">
+          {% for item in generated_redirects %}
+            {{ item }}
+          {% else %}
+            Немає результатів
+          {% endfor %}
+        </textarea>
+      </div>
+
+    </div>
+
+  </form>
+</body>
+
+
+
+
+  <script>
+    // Automatically expand textarea height based on content
+    function autoExpandTextarea(textarea) {
+      textarea.style.height = 'auto';
+      textarea.style.height = textarea.scrollHeight + 'px';
+    }
+
+    // Apply auto-expand to all textareas
+    document.querySelectorAll("textarea").forEach(textarea => {
+      textarea.addEventListener("input", () => autoExpandTextarea(textarea));
+      autoExpandTextarea(textarea);
+    });
+
+    // Save and restore the selected redirect type using localStorage
+    document.addEventListener("DOMContentLoaded", function () {
+      const redirectTypeSelect = document.getElementById("redirect_type");
+
+      const savedRedirectType = localStorage.getItem("selectedRedirectType");
+      if (savedRedirectType) {
+        redirectTypeSelect.value = savedRedirectType;
+      }
+
+      redirectTypeSelect.addEventListener("change", function () {
+        localStorage.setItem("selectedRedirectType", redirectTypeSelect.value);
+      });
+    });
+
+
+
+    // Update line numbers for textarea
+    function updateLineNumbers() {
+      const textarea = document.getElementById("generated_redirects");
+      const lineNumbers = document.getElementById("line_numbers");
+
+      const lines = textarea.value.split("\n").length;
+      lineNumbers.innerHTML = "";
+
+      for (let i = 1; i <= lines; i++) {
+        const lineDiv = document.createElement("div");
+        lineDiv.textContent = i;
+        lineNumbers.appendChild(lineDiv);
+      }
+    }
+
+    // Attach event listeners to update line numbers
+    document.getElementById("generated_redirects").addEventListener("input", updateLineNumbers);
+    document.addEventListener("DOMContentLoaded", updateLineNumbers);
+
+    // Handle URL checking and send data to backend
+    document.getElementById("checkButton").addEventListener("click", function () {
+      const toUrls = document.getElementById("our_sites").value.split("\n");
+
+      if (fromUrls.length === 0 || toUrls.length === 0 || fromUrls.length !== toUrls.length) {
+        return;
+      }
+
+      fetch("/check", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          our_sites: our_sites,
+        }),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.status === "success") {
+            renderStatusIcons(data.data);
+          }
+        })
+        .catch(() => {});
+    });
+  </script>
+
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
